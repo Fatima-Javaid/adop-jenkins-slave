@@ -6,6 +6,9 @@ ENV JAVA_VERSION=1.8.0_45
 ENV JAVA_TARBALL=server-jre-8u45-linux-x64.tar.gz
 ENV JAVA_HOME=/opt/java/jdk${JAVA_VERSION}
 
+#Terraform Env Variables
+ENV TERRAFORM_VERSION=0.11.3
+
 # Swarm Env Variables (defaults)
 ENV SWARM_MASTER=http://jenkins:8080/jenkins/
 ENV SWARM_USER=jenkins
@@ -17,6 +20,11 @@ ENV SLAVE_LABELS="docker aws ldap"
 ENV SLAVE_MODE="exclusive"
 ENV SLAVE_EXECUTORS=1
 ENV SLAVE_DESCRIPTION="Core Jenkins Slave"
+
+# Docker versions Env Variables
+ENV DOCKER_ENGINE_VERSION=1.10.3-1.el7.centos
+ENV DOCKER_COMPOSE_VERSION=1.6.0
+ENV DOCKER_MACHINE_VERSION=v0.6.0
 
 # Pre-requisites
 RUN yum -y install epel-release
@@ -31,14 +39,16 @@ RUN yum install -y which \
     python-pip \
     libxslt && \
     yum clean all 
+    
+# Install Terraform
+RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+RUN mv terraform /usr/local/bin/ && rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+RUN terraform --version
 
+# Install AWS CLI
 RUN pip install awscli==1.10.19
 
-# Docker versions Env Variables
-ENV DOCKER_ENGINE_VERSION=1.10.3-1.el7.centos
-ENV DOCKER_COMPOSE_VERSION=1.6.0
-ENV DOCKER_MACHINE_VERSION=v0.6.0
-
+# Install Docker
 RUN curl -fsSL https://get.docker.com/ | sed "s/docker-engine/docker-engine-${DOCKER_ENGINE_VERSION}/" | sh
 
 RUN curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
