@@ -2,10 +2,8 @@ FROM centos:centos7.2.1511
 MAINTAINER "Nick Griffin" <nicholas.griffin@accenture.com>
 
 # Java Env Variables
-ENV JAVA_VERSION_MAJOR=8 \
-    JAVA_VERSION_MINOR=144 \
-    JAVA_VERSION_BUILD=01 \
-    JAVA_URL_HASH=090f390dda5b47b9b721c7dfaa008135 
+ENV JAVA_VERSION 8u31
+ENV JAVA_BUILD_VERSION b13
 
 #Terraform Env Variables
 ENV TERRAFORM_VERSION=0.11.3
@@ -59,12 +57,17 @@ RUN curl -L https://github.com/docker/machine/releases/download/${DOCKER_MACHINE
     chmod +x /usr/local/bin/docker-machine
 
 # Install Java
-RUN wget --no-cookies --no-check-certificate \
-  --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2Ftechnetwork%2Fjava%2Fjavase%2Fdownloads%2Fjre8-downloads-2133155.html; oraclelicense=accept-securebackup-cookie" \
-  "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_URL_HASH}/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.rpm" && \
-yum localinstall -y jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.rpm && \
-rm -f jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.rpm && \
-rm -rf /var/cache/yum && rm -rf /tmp/* && rm -rf /var/log/*
+RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$JAVA_BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm
+
+RUN yum -y install /tmp/jdk-8-linux-x64.rpm
+
+RUN alternatives --install /usr/bin/java jar /usr/java/latest/bin/java 200000
+RUN alternatives --install /usr/bin/javaws javaws /usr/java/latest/bin/javaws 200000
+RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 200000
+
+ENV JAVA_HOME /usr/java/latest
+
+RUN rm -rf /var/cache/yum && rm -rf /tmp/* && rm -rf /var/log/*
 
 RUN which java
 RUN echo $JAVA_HOME
