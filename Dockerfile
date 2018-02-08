@@ -2,8 +2,12 @@ FROM centos:centos7.2.1511
 MAINTAINER "Nick Griffin" <nicholas.griffin@accenture.com>
 
 # Java Env Variables
-ENV JAVA_VERSION 8u31
-ENV JAVA_BUILD_VERSION b13
+ENV JAVA_VERSION 8u161
+ENV JAVA_MAJOR_VERSION 8
+ENV JAVA_BUILD_VERSION b12
+ENV JAVA_HASH 2f38c3b165be4555a1fa6e98c45e0808
+ENV JAVA_HOME /usr/java/latest
+ENV PATH $PATH:${JAVA_HOME}/bin
 
 #Terraform Env Variables
 ENV TERRAFORM_VERSION=0.11.3
@@ -57,22 +61,15 @@ RUN curl -L https://github.com/docker/machine/releases/download/${DOCKER_MACHINE
     chmod +x /usr/local/bin/docker-machine
 
 # Install Java
-#RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$JAVA_BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm
-RUN wget --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' 'http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.rpm' -O /tmp/jdk-8-linux-x64.rpm
+RUN wget --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' 'http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_HASH}/jdk-${JAVA_VERSION}-linux-x64.rpm' -O /tmp/jdk-${JAVA_MAJOR_VERSION}-linux-x64.rpm
 
-RUN yum -y install /tmp/jdk-8-linux-x64.rpm
+RUN yum -y install /tmp/jdk-${JAVA_MAJOR_VERSION}-linux-x64.rpm
 
-RUN alternatives --install /usr/bin/java jar /usr/java/latest/bin/java 200000
-RUN alternatives --install /usr/bin/javaws javaws /usr/java/latest/bin/javaws 200000
-RUN alternatives --install /usr/bin/javac javac /usr/java/latest/bin/javac 200000
-
-ENV JAVA_HOME /usr/java/latest
+RUN alternatives --install /usr/bin/java jar ${JAVA_HOME}/bin/java 200000
+RUN alternatives --install /usr/bin/javaws javaws ${JAVA_HOME}/bin/javaws 200000
+RUN alternatives --install /usr/bin/javac javac ${JAVA_HOME}/bin/javac 200000
 
 RUN rm -rf /var/cache/yum && rm -rf /tmp/* && rm -rf /var/log/*
-
-RUN which java
-RUN echo $JAVA_HOME
-RUN echo $PATH
 
 # Make Jenkins a slave by installing swarm-client
 RUN curl -s -o /bin/swarm-client.jar -k http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/2.0/swarm-client-2.0-jar-with-dependencies.jar
