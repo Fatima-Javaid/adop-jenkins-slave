@@ -2,9 +2,10 @@ FROM centos:centos7.2.1511
 MAINTAINER "Nick Griffin" <nicholas.griffin@accenture.com>
 
 # Java Env Variables
-ENV JAVA_VERSION=1.8.0_45
-ENV JAVA_TARBALL=server-jre-8u45-linux-x64.tar.gz
-ENV JAVA_HOME=/opt/java/jdk${JAVA_VERSION}
+ENV JAVA_VERSION_MAJOR=8 \
+    JAVA_VERSION_MINOR=144 \
+    JAVA_VERSION_BUILD=01 \
+    JAVA_URL_HASH=090f390dda5b47b9b721c7dfaa008135 
 
 #Terraform Env Variables
 ENV TERRAFORM_VERSION=0.11.3
@@ -28,7 +29,8 @@ ENV DOCKER_MACHINE_VERSION=v0.6.0
 
 # Pre-requisites
 RUN yum -y install epel-release
-RUN yum install -y which \
+RUN yum update -y && \
+yum install -y which \
     git \
     wget \
     tar \
@@ -57,13 +59,16 @@ RUN curl -L https://github.com/docker/machine/releases/download/${DOCKER_MACHINE
     chmod +x /usr/local/bin/docker-machine
 
 # Install Java
-RUN wget -q --no-check-certificate --directory-prefix=/tmp \
-         --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
-            http://download.oracle.com/otn-pub/java/jdk/8u45-b14/${JAVA_TARBALL} && \
-          mkdir -p /opt/java && \
-              tar -xzf /tmp/${JAVA_TARBALL} -C /opt/java/ && \
-            alternatives --install /usr/bin/java java /opt/java/jdk${JAVA_VERSION}/bin/java 100 && \
-                rm -rf /tmp/* && rm -rf /var/log/*
+RUN wget --no-cookies --no-check-certificate \
+  --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2Ftechnetwork%2Fjava%2Fjavase%2Fdownloads%2Fjre8-downloads-2133155.html; oraclelicense=accept-securebackup-cookie" \
+  "http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_URL_HASH}/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.rpm" && \
+yum localinstall -y jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.rpm && \
+rm -f jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.rpm && \
+rm -rf /var/cache/yum && rm -rf /tmp/* && rm -rf /var/log/*
+
+RUN which java
+RUN echo $JAVA_HOME
+RUN echo $PATH
 
 # Make Jenkins a slave by installing swarm-client
 RUN curl -s -o /bin/swarm-client.jar -k http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/2.0/swarm-client-2.0-jar-with-dependencies.jar
