@@ -61,9 +61,15 @@ RUN curl -L https://github.com/docker/machine/releases/download/${DOCKER_MACHINE
     chmod +x /usr/local/bin/docker-machine
 
 # Install Java
-RUN wget --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' 'http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_HASH}/jdk-${JAVA_VERSION}-linux-x64.rpm' -O /tmp/jdk-${JAVA_MAJOR_VERSION}-linux-x64.rpm
+#Using variables
+#RUN wget --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' 'http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-${JAVA_BUILD_VERSION}/${JAVA_HASH}/jdk-${JAVA_VERSION}-linux-x64.rpm' -O /tmp/jdk-${JAVA_MAJOR_VERSION}-linux-x64.rpm
+#Not using variables
+RUN wget --no-check-certificate --no-cookies --header 'Cookie: oraclelicense=accept-securebackup-cookie' 'http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.rpm' -O /tmp/jdk-8-linux-x64.rpm
 
-RUN yum -y install /tmp/jdk-${JAVA_MAJOR_VERSION}-linux-x64.rpm
+#Using variables
+#RUN yum -y install /tmp/jdk-${JAVA_MAJOR_VERSION}-linux-x64.rpm
+#Not using variables
+RUN yum -y install /tmp/jdk-8-linux-x64.rpm
 
 RUN alternatives --install /usr/bin/java jar ${JAVA_HOME}/bin/java 200000
 RUN alternatives --install /usr/bin/javaws javaws ${JAVA_HOME}/bin/javaws 200000
