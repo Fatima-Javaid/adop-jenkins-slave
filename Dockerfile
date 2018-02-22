@@ -52,6 +52,9 @@ RUN terraform --version
 # Install AWS CLI
 RUN pip install awscli==1.10.19
 
+# Install Tower CLI
+RUN pip install ansible-tower-cli
+
 # Install Docker
 RUN curl -fsSL https://get.docker.com/ | sed "s/docker-engine/docker-engine-${DOCKER_ENGINE_VERSION}/" | sh
 
