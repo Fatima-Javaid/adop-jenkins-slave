@@ -52,6 +52,9 @@ RUN terraform --version
 # Install AWS CLI
 RUN pip install awscli==1.10.19
 
+# Install Ansible
+RUN pip install ansible
+
 # Install Tower CLI
 RUN pip install ansible-tower-cli
 
