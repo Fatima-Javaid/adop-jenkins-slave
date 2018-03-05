@@ -19,9 +19,9 @@ ENV SWARM_PASSWORD=jenkins
 
 # Slave Env Variables
 ENV SLAVE_NAME="Swarm_Slave"
-ENV SLAVE_LABELS="docker aws ldap"
+ENV SLAVE_LABELS="docker aws ldap terraform tower"
 ENV SLAVE_MODE="exclusive"
-ENV SLAVE_EXECUTORS=1
+ENV SLAVE_EXECUTORS=2
 ENV SLAVE_DESCRIPTION="Core Jenkins Slave"
 
 # Docker versions Env Variables
