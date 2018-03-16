@@ -29,14 +29,37 @@ ENV DOCKER_ENGINE_VERSION=1.10.3-1.el7.centos
 ENV DOCKER_COMPOSE_VERSION=1.6.0
 ENV DOCKER_MACHINE_VERSION=v0.6.0
 
-ENV NPM_CONFIG_PREFIX=~/.npm-global
-
-USER root
-
+#ENV NPM_CONFIG_PREFIX=~/.npm-global
+#USER root
+#
 # Pre-requisites (Including NodeJS)
+#yum erase -y nodejs npm && \
+#    gcc c++ \
+#    make \
+#    bzip2 \
+#    fontconfig \
+#    freetype \
+
+#    #installing nodejs 9.x and upgrading pip to latest
+#RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
+#RUN yum install -y nodejs && \
+
+#RUN npm install -g --no-progress requirejs \
+#@angular/cli@1.3.2 \
+#tslint \
+#typescript \
+#karma \
+#jasmine \
+#jasmine-core \
+#karma-jasmine \
+#karma-phantomjs-launcher \
+#karma-htmlfile-reporter \
+#karma-jasmine-html-reporter \
+#karma-requirejs \
+#karma-junit-reporter
+
 RUN yum -y install epel-release
 RUN yum update -y && \
-yum erase -y nodejs npm && \
 yum install -y which \
     git \
     yum-utils \
@@ -47,31 +70,10 @@ yum install -y which \
     openldap-clients \
     openssl \
     python-pip \
-    gcc c++ \
-    make \
-    bzip2 \
-    fontconfig \
-    freetype \
-    libxslt
-    #installing nodejs 9.x and upgrading pip to latest
-RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
-RUN yum install -y nodejs && \
-yum clean all && rm -rf /var/cache/yum
-RUN pip install --upgrade pip
+    libxslt && yum clean all && rm -rf /var/cache/yum
 
-RUN npm install -g --no-progress requirejs \
-@angular/cli@1.3.2 \
-tslint \
-typescript \
-karma \
-jasmine \
-jasmine-core \
-karma-jasmine \
-karma-phantomjs-launcher \
-karma-htmlfile-reporter \
-karma-jasmine-html-reporter \
-karma-requirejs \
-karma-junit-reporter
+#upgrading pip
+RUN pip install --upgrade pip
     
 # Install Terraform
 RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
