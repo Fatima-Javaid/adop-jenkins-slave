@@ -19,7 +19,7 @@ ENV SWARM_PASSWORD=jenkins
 
 # Slave Env Variables
 ENV SLAVE_NAME="Swarm_Slave"
-ENV SLAVE_LABELS="docker aws ldap terraform tower"
+ENV SLAVE_LABELS="docker aws ldap terraform tower nodejs"
 ENV SLAVE_MODE="exclusive"
 ENV SLAVE_EXECUTORS=2
 ENV SLAVE_DESCRIPTION="Core Jenkins Slave"
@@ -29,7 +29,7 @@ ENV DOCKER_ENGINE_VERSION=1.10.3-1.el7.centos
 ENV DOCKER_COMPOSE_VERSION=1.6.0
 ENV DOCKER_MACHINE_VERSION=v0.6.0
 
-# Pre-requisites
+# Pre-requisites (Including NodeJS)
 RUN yum -y install epel-release
 RUN yum update -y && \
 yum install -y which \
@@ -41,8 +41,32 @@ yum install -y which \
     openldap-clients \
     openssl \
     python-pip \
+    npm \
+    gcc c++ \
+    make \
+    bzip2 \
+    fontconfig \
+    freetype \
     libxslt && \
     yum clean all 
+    
+    #installing nodejs 9.x
+RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
+ 
+RUN npm install -g --no-progress requirejs \
+@angular/cli@1.3.2 \
+tslint \
+typescript \
+karma \
+jasmine \
+jasmine-core \
+karma-jasmine \
+phantomjs-prebuilt \
+karma-phantomjs-launcher \
+karma-htmlfile-reporter \
+karma-jasmine-html-reporter \
+karma-requirejs \
+karma-junit-reporter
     
 # Install Terraform
 RUN wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
@@ -50,7 +74,7 @@ RUN mv terraform /usr/local/bin/ && rm -f terraform_${TERRAFORM_VERSION}_linux_a
 RUN terraform --version
 
 # Install AWS CLI
-RUN pip install awscli==1.10.19
+RUN pip install awscli==1.14.3
 
 # Install Ansible
 RUN pip install ansible
