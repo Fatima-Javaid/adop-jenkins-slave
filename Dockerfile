@@ -51,9 +51,10 @@ yum install -y which \
     libxslt && \
     yum clean all 
     
-    #installing nodejs 9.x
+    #installing nodejs 9.x and upgrading pip to latest
 RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
- 
+RUN pip install --upgrade pip
+
 RUN npm install -g --no-progress requirejs \
 @angular/cli@1.3.2 \
 tslint \
