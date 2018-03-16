@@ -48,9 +48,7 @@ yum install -y which \
     bzip2 \
     fontconfig \
     freetype \
-    libxslt && \
-    yum clean all && rm -rf /var/cache/yum
-    
+    libxslt
     #installing nodejs 9.x and upgrading pip to latest
 RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
 RUN yum install -y nodejs && \
