@@ -65,7 +65,6 @@ karma \
 jasmine \
 jasmine-core \
 karma-jasmine \
-phantomjs-prebuilt \
 karma-phantomjs-launcher \
 karma-htmlfile-reporter \
 karma-jasmine-html-reporter \
