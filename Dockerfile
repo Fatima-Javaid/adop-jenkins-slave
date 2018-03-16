@@ -32,6 +32,7 @@ ENV DOCKER_MACHINE_VERSION=v0.6.0
 # Pre-requisites (Including NodeJS)
 RUN yum -y install epel-release
 RUN yum update -y && \
+yum erase -y nodejs && \
 yum install -y which \
     git \
     wget \
