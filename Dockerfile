@@ -29,6 +29,8 @@ ENV DOCKER_ENGINE_VERSION=1.10.3-1.el7.centos
 ENV DOCKER_COMPOSE_VERSION=1.6.0
 ENV DOCKER_MACHINE_VERSION=v0.6.0
 
+USER root
+
 # Pre-requisites (Including NodeJS)
 RUN yum -y install epel-release
 RUN yum update -y && \
