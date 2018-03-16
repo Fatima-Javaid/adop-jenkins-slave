@@ -32,9 +32,10 @@ ENV DOCKER_MACHINE_VERSION=v0.6.0
 # Pre-requisites (Including NodeJS)
 RUN yum -y install epel-release
 RUN yum update -y && \
-yum erase -y nodejs && \
+yum erase -y nodejs npm && \
 yum install -y which \
     git \
+    yum-utils \
     wget \
     tar \
     zip \
@@ -42,14 +43,13 @@ yum install -y which \
     openldap-clients \
     openssl \
     python-pip \
-    npm \
     gcc c++ \
     make \
     bzip2 \
     fontconfig \
     freetype \
     libxslt && \
-    yum clean all 
+    yum clean all && rm -rf /var/cache/yum
     
     #installing nodejs 9.x and upgrading pip to latest
 RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
