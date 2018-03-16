@@ -53,7 +53,7 @@ yum install -y which \
     
     #installing nodejs 9.x and upgrading pip to latest
 RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
-RUN yum install -y npm && \
+RUN yum install -y nodejs && \
 yum clean all && rm -rf /var/cache/yum
 RUN pip install --upgrade pip
 
