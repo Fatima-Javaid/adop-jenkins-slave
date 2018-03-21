@@ -70,7 +70,7 @@ yum install -y which \
     openldap-clients \
     openssl \
     python-pip \
-    libxslt && yum clean all && rm -rf /var/cache/yum
+    libxslt
 
 #upgrading pip
 RUN pip install --upgrade pip
@@ -112,6 +112,7 @@ RUN alternatives --install /usr/bin/java jar ${JAVA_HOME}/bin/java 200000
 RUN alternatives --install /usr/bin/javaws javaws ${JAVA_HOME}/bin/javaws 200000
 RUN alternatives --install /usr/bin/javac javac ${JAVA_HOME}/bin/javac 200000
 
+RUN yum clean all
 RUN rm -rf /var/cache/yum && rm -rf /tmp/* && rm -rf /var/log/*
 
 # Make Jenkins a slave by installing swarm-client
