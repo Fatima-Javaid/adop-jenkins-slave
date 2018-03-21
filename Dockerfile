@@ -105,7 +105,7 @@ RUN curl -L https://github.com/docker/machine/releases/download/${DOCKER_MACHINE
 RUN wget --no-cookies \
 --no-check-certificate \
 --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-"http://download.oracle.com/otn-pub/java/jdk/9.0.4+11/c2514751926b4512b076cc82f959763f/jdk-9.0.4_linux-x64_bin.rpm"
+"http://download.oracle.com/otn-pub/java/jdk/9.0.4+11/c2514751926b4512b076cc82f959763f/jdk-9.0.4_linux-x64_bin.rpm" -O /tmp/jdk-9.0.4_linux-x64_bin.rpm
 #Using variables
 #RUN yum -y install /tmp/jdk-${JAVA_MAJOR_VERSION}-linux-x64.rpm
 #Not using variables
