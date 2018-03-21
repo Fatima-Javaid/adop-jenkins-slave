@@ -10,7 +10,7 @@ ENV JAVA_HOME=/usr/java/latest
 ENV PATH=$PATH:${JAVA_HOME}/bin
 
 #Terraform Env Variables
-ENV TERRAFORM_VERSION=0.11.3
+ENV TERRAFORM_VERSION=0.11.4
 
 # Swarm Env Variables (defaults)
 ENV SWARM_MASTER=http://jenkins:8080/jenkins/
