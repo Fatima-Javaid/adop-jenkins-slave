@@ -44,19 +44,19 @@ ENV DOCKER_MACHINE_VERSION=v0.6.0
 #RUN curl -s -L https://rpm.nodesource.com/setup_9.x | bash
 #RUN yum install -y nodejs && \
 
-#RUN npm install -g --no-progress requirejs \
-#@angular/cli@1.3.2 \
-#tslint \
-#typescript \
-#karma \
-#jasmine \
-#jasmine-core \
-#karma-jasmine \
-#karma-phantomjs-launcher \
-#karma-htmlfile-reporter \
-#karma-jasmine-html-reporter \
-#karma-requirejs \
-#karma-junit-reporter
+RUN npm install -g --no-progress requirejs \
+@angular/cli@1.3.2 \
+tslint \
+typescript \
+karma \
+jasmine \
+jasmine-core \
+karma-jasmine \
+karma-phantomjs-launcher \
+karma-htmlfile-reporter \
+karma-jasmine-html-reporter \
+karma-requirejs \
+karma-junit-reporter
 
 RUN yum -y install epel-release
 RUN yum update -y && \
